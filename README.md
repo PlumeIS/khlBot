@@ -26,7 +26,7 @@
 将会返回包含字符串的列表  
   
 ### 关于消息的处理  
-可以通过  
+可以通过   
     from message.MessageSender import MessageSender
     from message.GetChatList import ChatList
     
