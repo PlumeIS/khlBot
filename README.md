@@ -11,7 +11,7 @@
     pip install zipfile
     pip install bs4
   
-#### 机器人的登录 
+### 机器人的登录 
     from core.khlBotCoreEdge import Bot
     
     if __name__ == '__main__':
