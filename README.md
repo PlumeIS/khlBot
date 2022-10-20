@@ -9,7 +9,6 @@
     pip install tqdm
     pip install shutil
     pip install zipfile
-    pip install bs4
   
 ### 机器人的登录 
     from core.khlBotCoreEdge import Bot
@@ -29,20 +28,17 @@
 可以通过  
   
     from message.MessageSender import MessageSender
-    from message.GetChatList import ChatList
+    from message.MessageFetcher import MessageFetcher
     
     if __name__ == '__main__':
     bot = ......
     
-    cl = ChatList(bot, 50)
+    mf = MessageFetcher(bot, 50)
     ms = MessageSender(bot)
-    chat = cl.getChatList(1)
+    chat = mf.fetch()
     if chat:
         print(chat)
     ms.sendMessage("Hello World!")
   
 来接收以及发送消息  
   
-**注意!!!:请勿在循环获取消息中使用同一机器人调用sendMessage，会引发消息列表从后往前抛出并报错，这是个未修复的BUG（给我整不会了），暂时可以使用两个机器人来代替**  
-
-
