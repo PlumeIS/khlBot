@@ -13,7 +13,7 @@ class Bot:
         self.PhoneNumber = phoneNumber
         self.password = password
         options = Options()
-        options.headless = False
+        options.headless = True
         service = Service(executable_path="../lib/chromedriver.exe")
         self.botDriver = webdriver.Chrome(options=options, service=service)
 
