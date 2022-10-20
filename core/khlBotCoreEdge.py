@@ -25,7 +25,7 @@ class Bot:
             "profile.default_content_setting_values.geolocation": 1,
             "profile.default_content_setting_values.notifications": 1
         })
-        options.headless = False
+        options.headless = True
         service = Service(executable_path="D:\CodeProject\PythonProject\khlBot\lib\msedgedriver.exe")
         try:
             self.botDriver = webdriver.Edge(options=options, service=service)
