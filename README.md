@@ -9,6 +9,7 @@
 ## 使用API与机器人交互  
   
 安装依赖库后,启动:  
+  
     start.bat  
   
 ### [API文档](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md)  
