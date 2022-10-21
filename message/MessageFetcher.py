@@ -77,5 +77,5 @@ class MessageFetcher:
                             data["emoji"].append(
                                 {"view": emoji.get_attribute("alt"), "url": emoji.get_attribute("src")})
                 data["text"] = chatData.text
-            messageData.append({"sender": sender, "time": sendTime, "data": data})
+            messageData.append({"sender": sender, "time": sendTime.strftime("%y-%m-%d %H%M"), "data": data})
         return messageData
