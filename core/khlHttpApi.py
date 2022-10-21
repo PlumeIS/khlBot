@@ -34,7 +34,7 @@ def getServer():
 @app.route("/getChannelName", methods=["GET"])
 def getChannel():
     if bot.isSelectServer:
-        return jsonify({"code": 0, "msg": "success", "data": bot.getServers()})
+        return jsonify({"code": 0, "msg": "success", "data": bot.getChannels()})
     else:
         return jsonify({"code": 1, "msg": "Not Select Server!"})
 
@@ -55,7 +55,8 @@ def selectChannel():
     if bot.isSelectServer and request.form.get("name") in bot.getChannels():
         bot.selectChannel(request.form.get("name"))
         messageSender = MessageSender(bot)
-        messageFetcher = MessageFetcher(bot)
+        print(bot.botName)
+        messageFetcher = MessageFetcher(bot, filters=[bot.botName])
         return jsonify({"code": 0, "msg": "success"})
     else:
         return jsonify({"code": 0, "msg": "Not Select Server or Not Channel Name!"})
@@ -65,7 +66,9 @@ def selectChannel():
 def fetchMessage():
     global messageFetcher
     if bot.isSelectServer and bot.isSelectChannel:
-        return jsonify({"code": 0, "msg": "success", "data": messageFetcher.fetch()})
+        data = messageFetcher.fetch()
+        print(data)
+        return jsonify({"code": 0, "msg": "success", "data": data})
     else:
         return jsonify({"code": 1, "msg": "Not Select Server or Channel!"})
 
