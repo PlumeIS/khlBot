@@ -8,7 +8,7 @@
 
 ## 使用API与机器人交互  
   
-### [API文档](https://github.com/PlumeIS/khlBot/blob/main/core/httpApi.md)  
+### [API文档](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md)  
   
 ---  
   
