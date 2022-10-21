@@ -25,7 +25,6 @@ messageFetcher = None
 
 @app.route("/getServerName", methods=["GET"])
 def getServer():
-    print(bot.getServers())
     return jsonify({"code": 0, "msg": "success", "data": bot.getServers()})
 
 
