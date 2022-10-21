@@ -33,6 +33,8 @@
 | msg | str | 状态 |
 | data | list[str] | 包含服务器名称的列表 |
   
+---  
+  
 ### /getChannelName  
 方法:  
   
@@ -55,6 +57,8 @@
 | code | int | 状态码 |
 | msg | str | 状态 |
 | data | list[str] | 包含频道名称的列表 |
+  
+---  
   
 ### /selectServer  
 方法:  
@@ -83,6 +87,8 @@
 | code | int | 状态码 |
 | msg | str | 状态 |
   
+---  
+  
 ### /selectChannel  
 方法:  
   
@@ -109,6 +115,8 @@
 | ---- | ---- | ---- |
 | code | int | 状态码 |
 | msg | str | 状态 |
+  
+---  
   
 ### /fetchMessage  
 方法:  
@@ -160,7 +168,9 @@
 | image[url] | str | 图片链接 |
 | text | str | 消息文本 |
 | sender | str | 发送者 |
-| time | str | 时间 |
+| time | str | 时间(%y-%m-%d %H%M) |
+  
+---  
   
 ### /sendMessage  
 方法:  
