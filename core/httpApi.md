@@ -11,7 +11,9 @@
 ## 调用  
   
 ### /getServerName  
-方法 GET  
+方法  
+  
+    GET  
   
 输入:  
   
@@ -32,7 +34,9 @@
 | data | list[str] |
   
 ### /getChannelName  
-方法 GET  
+方法  
+  
+    GET  
   
 输入:  
   
@@ -53,7 +57,9 @@
 | data | list[str] |
   
 ### /selectServer  
-方法 POST  
+方法  
+  
+    POST  
   
 输入 表单数据:  
   
@@ -76,4 +82,59 @@
 | ---- | ---- |
 | code | int |
 | msg | str |
+  
+### /selectChannel  
+方法  
+  
+    POST  
+  
+输入 表单数据:  
+  
+    {
+     "name": "ChannelName"
+    }
+  
+| 变量 | 类型 |
+| ---- | ---- |
+| name | str |
+  
+输出 JSON:  
+  
+    {
+      "code": 0,
+      "msg": "success",
+    }  
+  
+| 变量 | 类型 |
+| ---- | ---- |
+| code | int |
+| msg | str |
+  
+### /fetchMessage  
+方法  
+  
+    GET, POST  
+  
+输入 表单数据:  
+  
+    {
+     "name": "ChannelName"
+    }
+  
+| 变量 | 类型 |
+| ---- | ---- |
+| name | str |
+  
+输出 JSON:  
+  
+    {
+      "code": 0,
+      "msg": "success",
+    }  
+  
+| 变量 | 类型 |
+| ---- | ---- |
+| code | int |
+| msg | str |
+
   
