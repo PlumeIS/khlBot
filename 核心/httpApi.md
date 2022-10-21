@@ -199,3 +199,32 @@
 | code | int | 状态码 |
 | msg | str | 状态 |
   
+### /sendImage  
+方法:  
+  
+    POST  
+  
+输入 表单数据:  
+  
+    {
+     "type": "",
+     "data": ""
+    }
+  
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| type | str | 图片类型,支持:本地路径(path),url(path),base64(base64) |
+| data | str | 本地路径,url,base64[str] |
+  
+输出 JSON:  
+  
+    {
+      "code": 0,
+      "msg": "success",
+    }  
+  
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
+  
