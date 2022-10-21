@@ -38,7 +38,7 @@
   
     无  
   
-输出:  
+输出 JSON:  
   
     {
       "code": 0,
@@ -51,4 +51,29 @@
 | code | int |
 | msg | str |
 | data | list[str] |
+  
+### /selectServer  
+方法 POST  
+  
+输入 表单数据:  
+  
+   {
+     "name": "ServerName"
+    }
+  
+| 变量 | 类型 |
+| ---- | ---- |
+| name | str |
+  
+输出 JSON:  
+  
+    {
+      "code": 0,
+      "msg": "success",
+    }  
+  
+| 变量 | 类型 |
+| ---- | ---- |
+| code | int |
+| msg | str |
   
