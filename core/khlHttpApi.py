@@ -1,4 +1,5 @@
 import json
+import base64
 from flask import Flask, request, jsonify
 from tools.AutoLogin import AutoLogin
 from khlBotCoreEdge import Bot
@@ -72,6 +73,27 @@ def sendMessage():
     global messageSender
     if bot.isSelectServer and bot.isSelectChannel:
         messageSender.sendMessage(request.form.get("text"))
+        return jsonify({"code": 0, "msg": "success"})
+    else:
+        return jsonify({"code": 1, "msg": "Not Select Server or Channel!"})
+
+
+@app.route("/sendImage", methods=["POST"])
+def sendImage():
+    global messageSender
+    if bot.isSelectServer and bot.isSelectChannel:
+        imgType = request.form.get("type")
+        imgdata = request.form.get("data")
+        if imgType == "base64":
+            with open("./temp.png", "wb") as img:
+                img.write(base64.b64decode(imgdata.encode("utf-8")))
+            messageSender.sendImage(path="./temp.png")
+        elif imgType == "path":
+            messageSender.sendImage(path=imgdata)
+        elif imgType == "url":
+            messageSender.sendImage(url=imgdata)
+        else:
+            return jsonify({"code": 1, "msg": "Only support type: base64, path, url"})
         return jsonify({"code": 0, "msg": "success"})
     else:
         return jsonify({"code": 1, "msg": "Not Select Server or Channel!"})
