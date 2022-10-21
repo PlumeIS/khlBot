@@ -5,6 +5,8 @@ from selenium.common.exceptions import *
 
 class MessageFetcher:
     def __init__(self, bot: Bot, filters=None):
+        if not filters:
+            filters = []
         self.bot = bot
         self.filters = filters
         self.messageCount = len(self.bot.getDriver().find_elements("class name", "text-message-item"))
@@ -43,7 +45,10 @@ class MessageFetcher:
         if readCount == 0:
             return []
         for message in allMessages[-readCount:]:
-            sender, date = headInfos[message.get_attribute("data-gather-id")]
+            try:
+                sender, date = headInfos[message.get_attribute("data-gather-id")]
+            except KeyError:
+                continue
 
             if sender in self.filters:
                 continue
