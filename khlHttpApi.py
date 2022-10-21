@@ -1,7 +1,7 @@
 import json
 from flask import Flask, request, jsonify
 from tools.AutoLogin import AutoLogin
-from khlBotCoreEdge import Bot
+from core.khlBotCoreEdge import Bot
 from message.MessageSender import MessageSender
 from message.MessageFetcher import MessageFetcher
 
