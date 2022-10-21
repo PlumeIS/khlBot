@@ -162,5 +162,30 @@
 | sender | str | 发送者 |
 | time | str | 时间 |
   
-
+### /sendMessage  
+方法:  
+  
+    POST  
+  
+输入 表单数据:  
+  
+    {
+     "text": ""
+    }
+  
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| text | str | 发送文本 |
+  
+输出 JSON:  
+  
+    {
+      "code": 0,
+      "msg": "success",
+    }  
+  
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
   
