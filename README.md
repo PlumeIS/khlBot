@@ -12,6 +12,7 @@
     pip install tqdm
     pip install shutil
     pip install zipfile
+    pip install flask
   
 ### 机器人的登录 
     from core.khlBotCoreEdge import Bot
