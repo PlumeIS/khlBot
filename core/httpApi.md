@@ -11,7 +11,7 @@
 ## 调用  
   
 ### /getServerName  
-方法  
+方法:  
   
     GET  
   
@@ -27,14 +27,14 @@
       "data": [...]
     }  
   
-| 变量 | 类型 |
-| ---- | ---- |
-| code | int |
-| msg | str |
-| data | list[str] |
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
+| data | list[str] | 包含服务器名称的列表 |
   
 ### /getChannelName  
-方法  
+方法:  
   
     GET  
   
@@ -50,26 +50,26 @@
       "data": [...]
     }  
   
-| 变量 | 类型 |
-| ---- | ---- |
-| code | int |
-| msg | str |
-| data | list[str] |
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
+| data | list[str] | 包含频道名称的列表 |
   
 ### /selectServer  
-方法  
+方法:  
   
     POST  
   
 输入 表单数据:  
   
     {
-     "name": "ServerName"
+     "name": ""
     }
   
-| 变量 | 类型 |
-| ---- | ---- |
-| name | str |
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| name | str | 服务器名称 |
   
 输出 JSON:  
   
@@ -78,25 +78,25 @@
       "msg": "success",
     }  
   
-| 变量 | 类型 |
-| ---- | ---- |
-| code | int |
-| msg | str |
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
   
 ### /selectChannel  
-方法  
+方法:  
   
     POST  
   
 输入 表单数据:  
   
     {
-     "name": "ChannelName"
+     "name": ""
     }
   
-| 变量 | 类型 |
-| ---- | ---- |
-| name | str |
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| name | str | 频道名称 |
   
 输出 JSON:  
   
@@ -105,36 +105,62 @@
       "msg": "success",
     }  
   
-| 变量 | 类型 |
-| ---- | ---- |
-| code | int |
-| msg | str |
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
   
 ### /fetchMessage  
-方法  
+方法:  
   
     GET, POST  
   
-输入 表单数据:  
+输入:  
   
-    {
-     "name": "ChannelName"
-    }
-  
-| 变量 | 类型 |
-| ---- | ---- |
-| name | str |
+    无
   
 输出 JSON:  
   
     {
       "code": 0,
       "msg": "success",
+      "data": [
+        {'data':
+          {
+            'emoji': [
+              {
+                "view": "",
+                "url": ""
+              }
+            ],
+            'image': [
+              {
+                "url": ""
+              }
+            ],
+            'text': ''
+           },
+           'sender': '',
+           'time': ''
+         },
+         ...
+      ]
     }  
   
-| 变量 | 类型 |
-| ---- | ---- |
-| code | int |
-| msg | str |
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
+| data | dict | 数据 |
+| data[data] | dict | 聊天数据 |
+| emoji | list | 表情 |
+| emoji[view] | str | 表情预览 |
+| emoji[url] | str | 表情链接 |
+| image | list | 图片 |
+| image[url] | str | 图片链接 |
+| text | str | 消息文本 |
+| sender | str | 发送者 |
+| time | str | 时间 |
+  
 
   
