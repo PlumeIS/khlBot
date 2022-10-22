@@ -1,13 +1,12 @@
-import time
-
 import os
+import time
 import win32clipboard
 from PIL import Image
 from io import BytesIO
-from lib.MainDownloader import ordinaryDownload, getFileName
 from core.khlBotCoreEdge import Bot
-from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import *
+from selenium.webdriver.common.keys import Keys
+from lib.MainDownloader import ordinaryDownload, getFileName
 
 
 class MessageSender:
