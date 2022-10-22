@@ -67,7 +67,6 @@ def fetchMessage():
     global messageFetcher
     if bot.isSelectServer and bot.isSelectChannel:
         data = messageFetcher.fetch()
-        print(data)
         return jsonify({"code": 0, "msg": "success", "data": data})
     else:
         return jsonify({"code": 1, "msg": "Not Select Server or Channel!"})
@@ -99,6 +98,16 @@ def sendImage():
             messageSender.sendImage(url=imgdata)
         else:
             return jsonify({"code": 1, "msg": "Only support type: base64, path, url"})
+        return jsonify({"code": 0, "msg": "success"})
+    else:
+        return jsonify({"code": 1, "msg": "Not Select Server or Channel!"})
+
+
+@app.route("/sendAt", methods=["POST"])
+def sendAt():
+    global messageSender
+    if bot.isSelectServer and bot.isSelectChannel:
+        messageSender.sendAt(request.form.get("username"))
         return jsonify({"code": 0, "msg": "success"})
     else:
         return jsonify({"code": 1, "msg": "Not Select Server or Channel!"})
