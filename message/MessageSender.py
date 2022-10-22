@@ -7,6 +7,7 @@ from io import BytesIO
 from lib.MainDownloader import ordinaryDownload, getFileName
 from core.khlBotCoreEdge import Bot
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import *
 
 
 class MessageSender:
@@ -14,15 +15,23 @@ class MessageSender:
         self.bot = bot
 
     def sendAt(self, username):
-        inputArea = self.bot.getDriver().find_element("class name", "slate-editor.theme-scroll-bar").find_element(
-            "tag name", "p")
-        inputArea.send_keys("@", username)
+        try:
+            inputArea = self.bot.getDriver().find_element("class name", "slate-editor.theme-scroll-bar").find_element(
+                "tag name", "p")
+        except NoSuchElementException:
+            raise ValueError("Can't find message input element!")
+        inputArea.send_keys("@")
+        time.sleep(0.1)
+        inputArea.send_keys(username)
         inputArea.send_keys(Keys.ENTER)
         inputArea.send_keys(Keys.ENTER)
 
     def sendMessage(self, message):
-        inputArea = self.bot.getDriver().find_element("class name", "slate-editor.theme-scroll-bar").find_element(
-            "tag name", "p")
+        try:
+            inputArea = self.bot.getDriver().find_element("class name", "slate-editor.theme-scroll-bar").find_element(
+                "tag name", "p")
+        except NoSuchElementException:
+            raise ValueError("Can't find message input element!")
         self.copyToClipboard(message)
         inputArea.send_keys(Keys.CONTROL, "v")
         inputArea.send_keys(Keys.ENTER)
@@ -39,8 +48,11 @@ class MessageSender:
                 ordinaryDownload(url, f"./temp.png")
                 path = f"./temp.png"
             self.copyImageToClipboard(path)
-            inputArea = self.bot.getDriver().find_element("class name", "slate-editor.theme-scroll-bar").find_element(
-                "tag name", "p")
+            try:
+                inputArea = self.bot.getDriver().find_element("class name", "slate-editor.theme-scroll-bar").find_element(
+                    "tag name", "p")
+            except NoSuchElementException:
+                raise ValueError("Can't find message input element!")
             inputArea.send_keys(Keys.CONTROL, "v")
             self.bot.getDriver().find_element("class name", "chuanyu-button.size-md.type-appprimary").click()
             self.bot.logger("INFO", f'Send a message to {self.bot.server}:{self.bot.channel} "{path}"')
