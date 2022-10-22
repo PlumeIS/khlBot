@@ -2,9 +2,9 @@ import sys
 sys.path.append("..")
 import json
 import base64
-from flask import Flask, request, jsonify
-from tools.AutoLogin import AutoLogin
 from core.khlBotCoreEdge import Bot
+from tools.AutoLogin import AutoLogin
+from flask import Flask, request, jsonify
 from message.MessageSender import MessageSender
 from message.MessageFetcher import MessageFetcher
 
@@ -41,8 +41,10 @@ def getChannel():
 
 @app.route("/selectServer", methods=["POST"])
 def selectServer():
+    global messageSender
     if request.form.get("name") in bot.getServers():
         bot.selectServer(request.form.get("name"))
+        messageSender = MessageSender(bot)
         return jsonify({"code": 0, "msg": "success"})
     else:
         return jsonify({"code": 1, "msg": "Not Server!"})
@@ -50,11 +52,9 @@ def selectServer():
 
 @app.route("/selectChannel", methods=["POST"])
 def selectChannel():
-    global messageSender
     global messageFetcher
     if bot.isSelectServer and request.form.get("name") in bot.getChannels():
         bot.selectChannel(request.form.get("name"))
-        messageSender = MessageSender(bot)
         print(bot.botName)
         messageFetcher = MessageFetcher(bot, filters=[bot.botName])
         return jsonify({"code": 0, "msg": "success"})
