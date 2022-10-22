@@ -10,7 +10,7 @@
   
 ## 调用  
   
-### /getServerName  
+### 获得服务器名列表 /getServerName  
 方法:  
   
     GET  
@@ -35,7 +35,7 @@
   
 ---  
   
-### /getChannelName  
+### 获得频道名列表 /getChannelName  
 方法:  
   
     GET  
@@ -60,7 +60,7 @@
   
 ---  
   
-### /selectServer  
+### 进入服务器 /selectServer  
 方法:  
   
     POST  
@@ -89,7 +89,7 @@
   
 ---  
   
-### /selectChannel  
+### 进入频道 /selectChannel  
 方法:  
   
     POST  
@@ -118,7 +118,7 @@
   
 ---  
   
-### /fetchMessage  
+### 捕获消息 /fetchMessage  
 方法:  
   
     GET, POST  
@@ -172,7 +172,7 @@
   
 ---  
   
-### /sendMessage  
+### 发送文本消息 /sendMessage  
 方法:  
   
     POST  
@@ -199,7 +199,7 @@
 | code | int | 状态码 |
 | msg | str | 状态 |
   
-### /sendImage  
+### 发送图片 /sendImage  
 方法:  
   
     POST  
@@ -215,6 +215,33 @@
 | ---- | ---- | ---- |
 | type | str | 图片类型,支持:本地路径(path),url(path),base64(base64) |
 | data | str | 本地路径,url,base64[str] |
+  
+输出 JSON:  
+  
+    {
+      "code": 0,
+      "msg": "success",
+    }  
+  
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
+  
+### 发送At消息 /sendAt  
+方法:  
+  
+    POST  
+  
+输入 表单数据:  
+  
+    {
+     "username": ""
+    }
+  
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| username | str | 用户名 |
   
 输出 JSON:  
   
