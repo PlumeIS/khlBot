@@ -255,3 +255,4 @@
 | code | int | 状态码 |
 | msg | str | 状态 |
   
+### [API更新日志](https://github.com/PlumeIS/khlBot/blob/main/doc/ApiUpdateLog.md)
