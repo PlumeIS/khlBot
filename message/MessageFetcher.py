@@ -103,5 +103,5 @@ class MessageFetcher:
                 sendTime = ConversionDate.ConversionDate(date)
 
             data = self.getChatData(message)
-            messageData.append({"sender": sender, "time": sendTime.strftime("%y-%m-%d %H%M"), "data": data})
+            messageData.append({"sender": sender, "time": sendTime.strftime("%y-%m-%d %H:%M"), "data": data})
         return messageData
