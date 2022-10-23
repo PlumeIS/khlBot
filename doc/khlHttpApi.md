@@ -168,7 +168,7 @@
 | image[url] | str | 图片链接 |
 | text | str | 消息文本 |
 | sender | str | 发送者 |
-| time | str | 时间(%y-%m-%d %H%M) |
+| time | str | 时间(%y-%m-%d %H:%M) |
   
 ---  
   
