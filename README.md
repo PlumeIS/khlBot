@@ -20,10 +20,10 @@
 ### 依赖库的安装  
     pip install selenium
     pip install requests
-    pip install tqdm
-    pip install shutil
     pip install zipfile
+    pip install shutil
     pip install flask
+    pip install tqdm
   
 ### 机器人的登录 
     from core.khlBotCoreEdge import Bot
@@ -48,7 +48,7 @@
     if __name__ == '__main__':
     bot = ......
     
-    mf = MessageFetcher(bot, 50)
+    mf = MessageFetcher(bot)
     ms = MessageSender(bot)
     chat = mf.fetch()
     if chat:
