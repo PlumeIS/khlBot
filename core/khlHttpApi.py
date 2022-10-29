@@ -1,10 +1,11 @@
 import sys
+import atexit
 sys.path.append("..")
 import json
 import base64
-from core.khlBotCoreEdge import Bot
-from tools.AutoLogin import AutoLogin
 from flask import Flask, request, jsonify
+from tools.AutoLogin import AutoLogin
+from core.khlBotCoreEdge import Bot
 from message.MessageSender import MessageSender
 from message.MessageFetcher import MessageFetcher
 
@@ -19,8 +20,9 @@ else:
     phone = accountConfig["account"]
     password = accountConfig["password"]
 
-bot = Bot(phone, password)
+bot = Bot(phone, password, True)
 bot.botLogin()
+atexit.register(bot.quit)
 
 messageSender = None
 messageFetcher = None
