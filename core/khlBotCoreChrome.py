@@ -8,14 +8,22 @@ from selenium.webdriver.chrome.service import Service
 
 
 class Bot:
-    def __init__(self, phoneNumber: str, password: str):
+    def __init__(self, phoneNumber: str, password: str, isUpdateDriver=False):
         self.startTime = datetime.datetime.now()
         self.PhoneNumber = phoneNumber
         self.password = password
         options = Options()
-        options.headless = True
+        options.headless = False
         service = Service(executable_path="../lib/chromedriver.exe")
-        self.botDriver = webdriver.Chrome(options=options, service=service)
+        try:
+            self.botDriver = webdriver.Chrome(options=options, service=service)
+        except SessionNotCreatedException:
+            if isUpdateDriver:
+                self.logger("ERROR", "Driver已过期,正在更新")
+                from lib.updateDriver import updateChromeDriver
+                updateChromeDriver("../lib/")
+                self.logger("INFO", "更新完成!")
+            self.botDriver = webdriver.Chrome(options=options, service=service)
 
         self.Elements = {
             "SwitchToPhoneNumberAndPasswordElement": '//*[@id="root"]/div/div[2]/div[1]/div[2]/div[1]/div[1]',
@@ -109,3 +117,6 @@ class Bot:
 
     def getDriver(self):
         return self.botDriver
+    
+    def quit(self):
+        self.botDriver.quit()
