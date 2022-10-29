@@ -21,11 +21,11 @@
 必要依赖库:  
   
     pip install selenium
-    pip install requests
     pip install flask
   
 以自动更新driver的方式启动机器人时(Bot(isUpdateDriver=True),仅Edge)，需要追加以下依赖库:  
   
+    pip install requests
     pip install zipfile
     pip install shutil
     pip install tqdm
