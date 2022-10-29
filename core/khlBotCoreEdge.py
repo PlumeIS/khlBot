@@ -3,13 +3,12 @@ import time
 import datetime
 from selenium import webdriver
 from selenium.common.exceptions import *
-from lib.updateDriver import updateMSEdgeDriver
 from selenium.webdriver.edge.options import Options
 from selenium.webdriver.edge.service import Service
 
 
 class Bot:
-    def __init__(self, phoneNumber: str, password: str):
+    def __init__(self, phoneNumber: str, password: str, isUpdateDriver=False):
         self.channel = None
         self.server = None
         self.startTime = datetime.datetime.now()
@@ -17,6 +16,7 @@ class Bot:
         self.password = password
         self.botName = ""
         self.isLogging = True
+        self.isUpdate = isUpdateDriver
 
         options = Options()
         options.add_experimental_option("prefs", {
@@ -25,14 +25,16 @@ class Bot:
             "profile.default_content_setting_values.geolocation": 1,
             "profile.default_content_setting_values.notifications": 1
         })
-        options.headless = True
-        service = Service(executable_path="D:\CodeProject\PythonProject\khlBot\lib\msedgedriver.exe")
+        options.headless = False
+        service = Service(executable_path="./lib/msedgedriver.exe")
         try:
             self.botDriver = webdriver.Edge(options=options, service=service)
         except SessionNotCreatedException:
-            self.logger("ERROR", "Driver已过期,正在更新")
-            updateMSEdgeDriver("D:/CodeProject/PythonProject/khlBot/lib/")
-            self.logger("INFO", "更新完成!")
+            if self.isUpdate:
+                self.logger("ERROR", "Driver已过期,正在更新")
+                from lib.updateDriver import updateMSEdgeDriver
+                updateMSEdgeDriver("./lib/")
+                self.logger("INFO", "更新完成!")
             self.botDriver = webdriver.Edge(options=options, service=service)
 
         self.Elements = {
@@ -51,7 +53,6 @@ class Bot:
         self.isGetChannels = False
         self.isSelectServer = False
         self.isSelectChannel = False
-
 
     def getXpathElement(self, element: str):
         return self.botDriver.find_element("xpath", self.Elements[element])
@@ -136,6 +137,7 @@ class Bot:
         self.server = serverName
         time.sleep(1)
         self.logger("INFO", f"Select server to {serverName}")
+        self.botName = self.botDriver.find_element("class name", "user-name-text").text
 
     def selectChannel(self, ChannelName: str):
         self.getChannels()
@@ -160,7 +162,6 @@ class Bot:
 
     def quitChannel(self):
         self.getXpathElement("QuitChannelButton").click()
-
 
     def setLogger(self, switch: bool):
         if switch:
