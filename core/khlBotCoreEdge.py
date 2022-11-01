@@ -25,7 +25,7 @@ class Bot:
             "profile.default_content_setting_values.geolocation": 1,
             "profile.default_content_setting_values.notifications": 1
         })
-        options.headless = False
+        options.headless = True
         options.add_argument('log-level=3')
         service = Service(executable_path="./lib/msedgedriver.exe")
         try:
