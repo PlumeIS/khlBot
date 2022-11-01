@@ -1,4 +1,3 @@
-import sys
 import atexit
 import json
 import base64
