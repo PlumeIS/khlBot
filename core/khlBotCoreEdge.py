@@ -33,14 +33,14 @@ class Bot:
         except SessionNotCreatedException:
             if self.isUpdate:
                 self.logger("ERROR", "Driver已过期,正在更新")
-                from lib.updateDriver import updateMSEdgeDriver
+                from tools.DriverUpdater import updateMSEdgeDriver
                 updateMSEdgeDriver()
                 self.logger("INFO", "更新完成!")
             self.botDriver = webdriver.Edge(options=options, service=service)
         except WebDriverException:
             if self.isUpdate:
                 self.logger("ERROR", "Driver不存在,正在下载")
-                from lib.updateDriver import updateMSEdgeDriver
+                from tools.DriverUpdater import updateMSEdgeDriver
                 updateMSEdgeDriver()
                 self.logger("INFO", "下载完成!")
             self.botDriver = webdriver.Edge(options=options, service=service)
