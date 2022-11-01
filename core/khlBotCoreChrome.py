@@ -14,14 +14,14 @@ class Bot:
         self.password = password
         options = Options()
         options.headless = False
-        service = Service(executable_path="../lib/chromedriver.exe")
+        service = Service(executable_path="./lib/chromedriver.exe")
         try:
             self.botDriver = webdriver.Chrome(options=options, service=service)
         except SessionNotCreatedException:
             if isUpdateDriver:
                 self.logger("ERROR", "Driver已过期,正在更新")
-                from lib.updateDriver import updateChromeDriver
-                updateChromeDriver("../lib/")
+                from tools.DriverUpdater import updateChromeDriver
+                updateChromeDriver()
                 self.logger("INFO", "更新完成!")
             self.botDriver = webdriver.Chrome(options=options, service=service)
 
@@ -117,6 +117,6 @@ class Bot:
 
     def getDriver(self):
         return self.botDriver
-    
+
     def quit(self):
         self.botDriver.quit()
