@@ -25,18 +25,24 @@ class Bot:
             "profile.default_content_setting_values.geolocation": 1,
             "profile.default_content_setting_values.notifications": 1
         })
-        options.headless = True
-        options.add_argument('--disable-gpu')
+        options.headless = False
         options.add_argument('log-level=3')
-        service = Service(executable_path="../lib/msedgedriver.exe")
+        service = Service(executable_path="./lib/msedgedriver.exe")
         try:
             self.botDriver = webdriver.Edge(options=options, service=service)
         except SessionNotCreatedException:
             if self.isUpdate:
                 self.logger("ERROR", "Driver已过期,正在更新")
                 from lib.updateDriver import updateMSEdgeDriver
-                updateMSEdgeDriver("../lib/")
+                updateMSEdgeDriver()
                 self.logger("INFO", "更新完成!")
+            self.botDriver = webdriver.Edge(options=options, service=service)
+        except WebDriverException:
+            if self.isUpdate:
+                self.logger("ERROR", "Driver不存在,正在下载")
+                from lib.updateDriver import updateMSEdgeDriver
+                updateMSEdgeDriver()
+                self.logger("INFO", "下载完成!")
             self.botDriver = webdriver.Edge(options=options, service=service)
 
         self.Elements = {
@@ -178,3 +184,6 @@ class Bot:
 
     def getDriver(self):
         return self.botDriver
+
+    def quit(self):
+        self.botDriver.quit()
