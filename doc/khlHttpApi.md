@@ -189,7 +189,7 @@
 
 ## 服务器成员
 
-### 获得服务器全部成员昵称 /getAllMemberInfo  
+### 获得服务器全部成员昵称 /getMemberList
 条件:
 
     /selectServer
