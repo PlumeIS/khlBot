@@ -9,6 +9,7 @@ from message.MessageFetcher import MessageFetcher
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
+app.config['JSON_SORT_KEYS'] = False
 
 messageSender: MessageSender
 messageFetcher: MessageFetcher
@@ -161,7 +162,7 @@ def getMemberList():
 @app.route("/getAllMemberInfo", methods=["GET"])
 def getAllMemberInfo():
     respond = Respond()
-    isProfile = request.form.get("profile", "None")
+    isProfile = request.args.get("profile", "None")
     if not isProfile == "None":
         if bot.isSelectServer:
             try:
@@ -180,8 +181,8 @@ def getAllMemberInfo():
 @app.route("/getMemberInfo", methods=["GET"])
 def getMemberInfo():
     respond = Respond()
-    name = request.form.get("name")
-    isProfile = request.form.get("profile", "None")
+    name = request.args.get("name")
+    isProfile = request.args.get("profile", "None")
     if name:
         if not isProfile == "None":
             if bot.isSelectServer:
