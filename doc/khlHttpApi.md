@@ -1,9 +1,21 @@
 # API文档
 ## API目录
 + ### [服务器以及频道](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BB%A5%E5%8F%8A%E9%A2%91%E9%81%93)
+  + [获得服务器名列表](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E8%8E%B7%E5%BE%97%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%8D%E5%88%97%E8%A1%A8-getservername)
+  + [获得频道名列表](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E8%8E%B7%E5%BE%97%E9%A2%91%E9%81%93%E5%90%8D%E5%88%97%E8%A1%A8-getchannelname)
+  + [进入服务器](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E8%BF%9B%E5%85%A5%E6%9C%8D%E5%8A%A1%E5%99%A8-selectserver)
+  + [进入频道](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E8%BF%9B%E5%85%A5%E9%A2%91%E9%81%93-selectchannel)
 + ### [机器人相关](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%9B%B8%E5%85%B3)
+  + [获得机器人名称](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E8%8E%B7%E5%BE%97%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%90%8D%E7%A7%B0-getbotname)
 + ### [服务器成员](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%88%90%E5%91%98)
+  + [获得服务器全部成员昵称](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E8%8E%B7%E5%BE%97%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%A8%E9%83%A8%E6%88%90%E5%91%98%E6%98%B5%E7%A7%B0-getallmemberinfo)
+  + [获得成员资料](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E8%8E%B7%E5%BE%97%E6%88%90%E5%91%98%E4%BF%A1%E6%81%AF-getmemberinfo)
+  + [获得全部成员资料](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E8%8E%B7%E5%BE%97%E5%85%A8%E9%83%A8%E6%88%90%E5%91%98%E4%BF%A1%E6%81%AF-getallmemberinfo)
 + ### [消息相关](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E6%B6%88%E6%81%AF%E7%9B%B8%E5%85%B3)
+  + [捕获消息](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E6%8D%95%E8%8E%B7%E6%B6%88%E6%81%AF-fetchmessage)
+  + [发送文本消息](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E5%8F%91%E9%80%81%E6%96%87%E6%9C%AC%E6%B6%88%E6%81%AF-sendmessage)
+  + [发送图片](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E5%8F%91%E9%80%81%E5%9B%BE%E7%89%87-sendimage)
+  + [发送At消息](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E5%8F%91%E9%80%81at%E6%B6%88%E6%81%AF-sendat)
 ### [API更新日志](https://github.com/PlumeIS/khlBot/blob/main/doc/ApiUpdateLog.md)
 
 ## 配置文件  
@@ -206,7 +218,7 @@
   
 --- 
 
-### 获得成员信息 /getMemberInfo  
+### 获得成员资料 /getMemberInfo  
 条件:
 
     /selectServer
@@ -268,7 +280,7 @@
 
 --- 
 
-### 获得全部成员信息 /getAllMemberInfo  
+### 获得全部成员资料 /getAllMemberInfo  
 #### 注意:极其耗时,不建议使用,30人的服务器需要等待10秒左右
 条件:
 
