@@ -22,6 +22,8 @@ codes = {
     5: "Io error!"
 }
 
+version = "1.3.9"
+
 
 class Respond(dict):
     def __init__(self, code=None, msg=None, data=None):
@@ -47,6 +49,11 @@ class Respond(dict):
     def setData(self, data):
         self["data"] = data
         return self
+
+
+@app.route("/about", methods=["GET", "POST"])
+def about():
+    return jsonify(Respond(data={"version": version}))
 
 
 @app.route("/getServerName", methods=["GET"])
@@ -136,6 +143,63 @@ def getBotName():
         return jsonify(respond.setCode(3).setMsg(codes[3] + " Not server selected!"))
 
 
+@app.route("/getMemberList", methods=["GET"])
+def getMemberList():
+    respond = Respond()
+    if bot.isSelectServer:
+        try:
+            data = bot.getUsers()
+        except Exception as err:
+            respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+            return jsonify(respond)
+        else:
+            return jsonify(respond.setData(data))
+    else:
+        return jsonify(respond.setCode(3).setMsg(codes[3] + " Not server selected!"))
+
+
+@app.route("/getAllMemberInfo", methods=["GET"])
+def getAllMemberInfo():
+    respond = Respond()
+    isProfile = request.form.get("profile", "None")
+    if not isProfile == "None":
+        if bot.isSelectServer:
+            try:
+                data = bot.getAllUserInfo(isProfile)
+            except Exception as err:
+                respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+                return jsonify(respond)
+            else:
+                return jsonify(respond.setData(data))
+        else:
+            return jsonify(respond.setCode(3).setMsg(codes[3] + " Not server selected!"))
+    else:
+        return jsonify(respond.setCode(1).setCode(codes[2] + '"profile"'))
+
+
+@app.route("/getMemberInfo", methods=["GET"])
+def getMemberInfo():
+    respond = Respond()
+    name = request.form.get("name")
+    isProfile = request.form.get("profile", "None")
+    if name:
+        if not isProfile == "None":
+            if bot.isSelectServer:
+                try:
+                    data = bot.getUserInfo(name, isProfile)
+                except Exception as err:
+                    respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+                    return jsonify(respond)
+                else:
+                    return jsonify(respond.setData(data))
+            else:
+                return jsonify(respond.setCode(3).setMsg(codes[3] + " Not server selected!"))
+        else:
+            return jsonify(respond.setCode(1).setCode(codes[2] + '"profile"'))
+    else:
+        return jsonify(respond.setCode(1).setCode(codes[2] + '"name"'))
+
+
 @app.route("/fetchMessage", methods=["GET", "POST"])
 def fetchMessage():
     global messageFetcher
@@ -191,7 +255,7 @@ def sendImage():
                 elif imgType == "url":
                     messageSender.sendImage(url=imgdata)
                 else:
-                    return respond.setCode(1).setMsg(codes[1]+"Only support type: base64, path, url")
+                    return respond.setCode(1).setMsg(codes[1] + "Only support type: base64, path, url")
             except Exception as err:
                 respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
                 return jsonify(respond)
