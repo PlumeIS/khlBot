@@ -260,7 +260,7 @@ class Bot:
                     else:
                         profile = None
                     userInfos.append({"online": online, "nameId": userNameId, "name": userName, "id": userId, "nick": userNick, "avatar": userAvatar,
-                                      "banner": userBanner, "profile": profile, "game": userGaming})
+                                      "banner": userBanner, "profile": profile, "roles": roles, "game": userGaming})
                 except NoSuchElementException:
                     continue
             self.botDriver.find_element("tag name", "body").send_keys(Keys.ESCAPE)
@@ -339,7 +339,7 @@ class Bot:
                             profile = None
                             self.botDriver.find_element("tag name", "body").send_keys(Keys.ESCAPE)
                         return {"online": online, "nameId": userNameId, "name": userName, "id": userId, "nick": userNick, "avatar": userAvatar,
-                                "banner": userBanner, "profile": profile, "game": userGaming}
+                                "banner": userBanner, "profile": profile, "roles": roles, "game": userGaming}
                 except NoSuchElementException:
                     continue
         return None
