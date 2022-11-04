@@ -12,6 +12,8 @@
   
 ## 调用  
 
+## 服务器以及频道
+
 ### 获得服务器名列表 /getServerName  
 条件:
 
@@ -136,6 +138,8 @@
 
 ---  
 
+## 机器人相关
+
 ### 获得机器人名称 /getBotName  
 条件:
 
@@ -164,6 +168,8 @@
 | data | str | 机器人名称 |
   
 --- 
+
+## 服务器成员
 
 ### 获得服务器全部成员昵称 /getAllMemberInfo  
 条件:
@@ -289,6 +295,8 @@
 | data | list | 单条内容为/getMemberInfo的data |
 
 --- 
+
+## 消息相关
 
 ### 捕获消息 /fetchMessage  
 条件:  
