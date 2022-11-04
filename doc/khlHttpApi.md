@@ -11,6 +11,10 @@
 ## 调用  
   
 ### 获得服务器名列表 /getServerName  
+条件:
+  
+    无
+  
 方法:  
   
     GET  
@@ -36,6 +40,10 @@
 ---  
   
 ### 获得频道名列表 /getChannelName  
+条件:
+  
+    /getServerName
+  
 方法:  
   
     GET  
@@ -61,6 +69,10 @@
 ---  
   
 ### 进入服务器 /selectServer  
+条件:  
+
+    无
+
 方法:  
   
     POST  
