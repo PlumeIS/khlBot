@@ -292,3 +292,33 @@
 | ---- | ---- | ---- |
 | code | int | 状态码 |
 | msg | str | 状态 |
+
+### 获得机器人名称 /getBotName  
+条件:
+
+    /selectServer
+    /selectChannel
+
+方法:  
+
+    GET  
+
+输入:  
+
+    无  
+
+输出 JSON:  
+
+    {
+      "code": 0,
+      "msg": "success",
+      "data": ""
+    }  
+
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
+| data | str | 机器人名称 |
+  
+---  
