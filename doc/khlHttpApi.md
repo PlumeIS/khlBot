@@ -140,7 +140,6 @@
 条件:
 
     /selectServer
-    /selectChannel
 
 方法:  
 
@@ -164,6 +163,140 @@
 | msg | str | 状态 |
 | data | str | 机器人名称 |
   
+--- 
+
+### 获得服务器全部成员昵称 /getAllMemberInfo  
+条件:
+
+    /selectServer
+
+方法:  
+
+    GET  
+
+输入:  
+
+    无  
+
+输出 JSON:  
+
+    {
+      "code": 0,
+      "msg": "success",
+      "data": []
+    }  
+
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
+| data | list[str] | 包含成员昵称的列表 |
+  
+--- 
+
+### 获得成员信息 /getMemberInfo  
+条件:
+
+    /selectServer
+
+方法:  
+
+    GET  
+
+输入:  
+
+    name="name"&profile=False  
+
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| name | str | 成员昵称 |
+| profile | bool | 是否获取简介(建议为False,否则增加查询耗时) |
+  
+输出 JSON:  
+
+    {
+      "code": 0,
+      "msg": "success",
+      "data": {
+        "online": True,
+        "nameId": "",
+        "name": "",
+        "id": "",
+        "nick": "",
+        "avatar": "",
+        "banner": "",
+        "game": {
+          "type": "",
+          "name"|"game":,
+          "time"|"siger"
+        }
+      }
+    }  
+
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
+| data | dict | 信息 |
+| online | bool | 是否上线 |
+| nameId | str | 包含ID的名称(绿毛#0001) |
+| name | str | 名称 |
+| id | str | ID(不带#号) |
+| nick | str | 昵称(在服务器中的名称) |
+| avatar | str | 头像(url) |
+| banner | str/None | 背景(url或None) |
+| game | dict | 正在玩的游戏或听的音乐 |
+| type | str | 类型("正在玩游戏"或"正在听音乐") |
+| name/game | str | 音乐或游戏名称 |
+| time/siger | str | 游戏时长或歌手 |
+
+--- 
+
+### 获得全部成员信息 /getAllMemberInfo  
+#### 注意:极其耗时,不建议使用,30人的服务器需要等待10秒左右
+条件:
+
+    /selectServer
+
+方法:  
+
+    GET  
+
+输入:  
+
+    profile=False  
+
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| profile | bool | 是否获取简介(建议为False,否则增加查询耗时) |
+  
+输出 JSON:  
+
+    {
+      "code": 0,
+      "msg": "success",
+      "data": {
+        "online": True,
+        "nameId": "",
+        "name": "",
+        "id": "",
+        "nick": "",
+        "avatar": "",
+        "banner": "",
+        "game": {
+          "type": "",
+          "name"|"game":,
+          "time"|"siger"
+        }
+      }
+    }  
+
+| 变量 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| code | int | 状态码 |
+| msg | str | 状态 |
+| data | list | 单条内容为/getMemberInfo的data |
+
 --- 
 
 ### 捕获消息 /fetchMessage  
