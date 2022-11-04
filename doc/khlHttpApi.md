@@ -205,7 +205,7 @@
 
 输入:  
 
-    name="name"&profile=False  
+    name="name"&profile=false
 
 | 变量 | 类型 | 描述 |
 | ---- | ---- | ---- |
@@ -225,6 +225,8 @@
         "nick": "",
         "avatar": "",
         "banner": "",
+        "profile": "",
+        "roles":[],
         "game": {
           "type": "",
           "name"|"game":,
@@ -245,6 +247,8 @@
 | nick | str | 昵称(在服务器中的名称) |
 | avatar | str | 头像(url) |
 | banner | str/None | 背景(url或None) |
+| profile | str/None | 个人简介(输入profile=false时为None) |
+| roles | list[str] | 包含角色名称的列表 |
 | game | dict | 正在玩的游戏或听的音乐 |
 | type | str | 类型("正在玩游戏"或"正在听音乐") |
 | name/game | str | 音乐或游戏名称 |
@@ -264,7 +268,7 @@
 
 输入:  
 
-    profile=False  
+    profile=false
 
 | 变量 | 类型 | 描述 |
 | ---- | ---- | ---- |
@@ -275,21 +279,8 @@
     {
       "code": 0,
       "msg": "success",
-      "data": {
-        "online": True,
-        "nameId": "",
-        "name": "",
-        "id": "",
-        "nick": "",
-        "avatar": "",
-        "banner": "",
-        "game": {
-          "type": "",
-          "name"|"game":,
-          "time"|"siger"
-        }
-      }
-    }  
+      "data": [],
+    }
 
 | 变量 | 类型 | 描述 |
 | ---- | ---- | ---- |
