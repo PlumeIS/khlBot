@@ -3,6 +3,7 @@ import time
 import datetime
 from selenium import webdriver
 from selenium.common.exceptions import *
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.edge.options import Options
 from selenium.webdriver.edge.service import Service
 
@@ -64,6 +65,32 @@ class Bot:
     def getXpathElement(self, element: str):
         return self.botDriver.find_element("xpath", self.Elements[element])
 
+    def waitElement(self, method, value, timeout, interval):
+        t = time.time()
+        while True:
+            try:
+                self.botDriver.find_element(method, value)
+            except NoSuchElementException:
+                pass
+            else:
+                return self.botDriver.find_element(method, value)
+            if time.time() - t > timeout:
+                raise TimeoutException(f"Can't not wait element {value} by {method}")
+            time.sleep(interval)
+
+    def waitElementByElement(self, element, method, value, timeout, interval):
+        t = time.time()
+        while True:
+            try:
+                element.find_element(method, value)
+            except NoSuchElementException:
+                pass
+            else:
+                return self.botDriver.find_element(method, value)
+            if time.time() - t > timeout:
+                raise TimeoutException(f"Can't not wait element {value} by {method}")
+            time.sleep(interval)
+
     def botLogin(self):
         self.logger("INFO", "Start login")
         self.botDriver.get("https://www.kaiheila.cn/app/login")
@@ -77,10 +104,7 @@ class Bot:
         try:
             self.getXpathElement("LoginButtonElement")
         except NoSuchElementException:
-            while True:
-                if self.botDriver.find_elements("class name", "icon-clip.image-button"):
-                    time.sleep(0.5)
-                    break
+            self.waitElement("class name", "icon-clip.image-button", 1000, 0.5)
             self.logger("INFO", "Login successful")
         else:
             self.logger("ERROR", "Wrong password!")
@@ -150,6 +174,177 @@ class Bot:
             return self.botDriver.find_element("class name", "user-name-text").text
         else:
             return None
+
+    def getUsers(self):
+        if self.isSelectServer:
+            userNames = []
+            users = self.botDriver.find_elements("class name", "user-item")
+            for i in users:
+                try:
+                    userNames.append(i.find_element("class name", "user-name-text").text)
+                except NoSuchElementException:
+                    continue
+            return userNames
+        else:
+            return []
+
+    def getAllUserInfo(self, isReadProfile):
+        if self.isSelectServer:
+            users = self.botDriver.find_elements("class name", "user-item")
+            userInfos = []
+            for i in users:
+                try:
+                    self.botDriver.execute_script("arguments[0].scrollIntoView(false);", i)
+                    self.botDriver.execute_script("arguments[0].scrollIntoView();", i)
+                    i.find_element("class name", "user-name-text")
+                    online = False if "offline" in i.get_attribute("class") else True
+                    i.click()
+                    try:
+                        self.waitElement("class name", "user-info-card-content", 5, 0)
+                    except TimeoutException:
+                        return None
+                    nameCard = self.botDriver.find_element("class name", "user-basic-content")
+                    try:
+                        userNameIdText = nameCard.find_element("class name", "user-name")
+                    except NoSuchElementException:
+                        userName = nameCard.find_element("class name", "name").text
+                        userId = nameCard.find_element("class name", "user-id").text.replace("#", "")
+                        userNameId = userName + "#" + userId
+                        userNick = userName
+                    else:
+                        userName = userNameIdText.find_element("class name", "name").text
+                        userId = userNameIdText.find_element("class name", "user-id").text.replace("#", "")
+                        userNameId = userName + "#" + userId
+                        userNick = nameCard.find_element("class name", "name").text
+
+                    roles = []
+                    roleBox = self.botDriver.find_elements("class name", "role-name")
+                    for j in roleBox:
+                        roles.append(j.text)
+
+                    userGaming = {}
+                    try:
+                        gamingBox = self.botDriver.find_element("class name", "user-game-panel")
+                    except NoSuchElementException:
+                        pass
+                    else:
+                        userGamingType = gamingBox.find_element("class name", "title").text
+                        userGaming["type"] = userGamingType
+                        if userGamingType == "正在玩游戏":
+                            userGaming["game"] = gamingBox.find_element("class name", "game-name").text
+                            userGaming["time"] = gamingBox.find_element("class name", "game-time").text
+                        else:
+                            userGaming["name"] = gamingBox.find_element("class name", "music-name").text
+                            userGaming["siger"] = gamingBox.find_element("class name", "music-siger").text
+                            userGamingIcon = gamingBox.find_element("class name", "game-icon").get_attribute("style")
+                            if userGamingIcon:
+                                userGaming["icon"] = re.findall('url[(]"(.*?)"[)]', userGamingIcon)[0]
+                            else:
+                                userGaming["icon"] = None
+
+                    try:
+                        userBannerImg = self.botDriver.find_element("class name", "user-banner.has-banner")
+                        userAvatarStyle = userBannerImg.get_attribute("style")
+                        userBanner = re.findall('url[(]"(.*?)"[)]', userAvatarStyle)[0]
+                    except NoSuchElementException:
+                        userBanner = None
+
+                    userAvatarBox = self.botDriver.find_element("class name", "user-avatar-img")
+                    userAvatarImg = userAvatarBox.find_element("class name", "kook-avatar-picture-static")
+                    userAvatarStyle = userAvatarImg.get_attribute("style")
+                    userAvatar = re.findall('url[(]"(.*?)/icon"[)]', userAvatarStyle)[0]
+                    if isReadProfile:
+                        userAvatarBox.click()
+                        profile = self.waitElement("class name", "textarea-box", 1, 0).text
+                        self.botDriver.find_element("tag name", "body").send_keys(Keys.ESCAPE)
+                    else:
+                        profile = None
+                    userInfos.append({"online": online, "nameId": userNameId, "name": userName, "id": userId, "nick": userNick, "avatar": userAvatar,
+                                      "banner": userBanner, "profile": profile, "game": userGaming})
+                    lastElement = i
+                except NoSuchElementException:
+                    continue
+            time.sleep(0.1)
+            lastElement.click()
+            return userInfos
+        return None
+
+    def getUserInfo(self, nickName, isReadProfile):
+        if self.isSelectServer:
+            users = self.botDriver.find_elements("class name", "user-item")
+            for i in users:
+                try:
+                    self.botDriver.execute_script("arguments[0].scrollIntoView(false);", i)
+                    self.botDriver.execute_script("arguments[0].scrollIntoView();", i)
+                    if i.find_element("class name", "user-name-text").text == nickName:
+                        online = False if "offline" in i.get_attribute("class") else True
+                        i.click()
+                        try:
+                            self.waitElement("class name", "user-info-card-content", 5, 0)
+                        except TimeoutException:
+                            return None
+                        nameCard = self.botDriver.find_element("class name", "user-basic-content")
+                        try:
+                            userNameIdText = nameCard.find_element("class name", "user-name")
+                        except NoSuchElementException:
+                            userName = nameCard.find_element("class name", "name").text
+                            userId = nameCard.find_element("class name", "user-id").text.replace("#", "")
+                            userNameId = userName + "#" + userId
+                            userNick = userName
+                        else:
+                            userName = userNameIdText.find_element("class name", "name").text
+                            userId = userNameIdText.find_element("class name", "user-id").text.replace("#", "")
+                            userNameId = userName + "#" + userId
+                            userNick = nameCard.find_element("class name", "name").text
+
+                        roles = []
+                        roleBox = self.botDriver.find_elements("class name", "role-name")
+                        for j in roleBox:
+                            roles.append(j.text)
+
+                        userGaming = {}
+                        try:
+                            gamingBox = self.botDriver.find_element("class name", "user-game-panel")
+                        except NoSuchElementException:
+                            pass
+                        else:
+                            userGamingType = gamingBox.find_element("class name", "title").text
+                            userGaming["type"] = userGamingType
+                            if userGamingType == "正在玩游戏":
+                                userGaming["game"] = gamingBox.find_element("class name", "game-name").text
+                                userGaming["time"] = gamingBox.find_element("class name", "game-time").text
+                            else:
+                                userGaming["name"] = gamingBox.find_element("class name", "music-name").text
+                                userGaming["siger"] = gamingBox.find_element("class name", "music-siger").text
+                                userGamingIcon = gamingBox.find_element("class name", "game-icon").get_attribute("style")
+                                if userGamingIcon:
+                                    userGaming["icon"] = re.findall('url[(]"(.*?)"[)]', userGamingIcon)[0]
+                                else:
+                                    userGaming["icon"] = None
+
+                        try:
+                            userBannerImg = self.botDriver.find_element("class name", "user-banner.has-banner")
+                            userAvatarStyle = userBannerImg.get_attribute("style")
+                            userBanner = re.findall('url[(]"(.*?)"[)]', userAvatarStyle)[0]
+                        except NoSuchElementException:
+                            userBanner = None
+
+                        userAvatarBox = self.botDriver.find_element("class name", "user-avatar-img")
+                        userAvatarImg = userAvatarBox.find_element("class name", "kook-avatar-picture-static")
+                        userAvatarStyle = userAvatarImg.get_attribute("style")
+                        userAvatar = re.findall('url[(]"(.*?)/icon"[)]', userAvatarStyle)[0]
+                        if isReadProfile:
+                            userAvatarBox.click()
+                            profile = self.waitElement("class name", "textarea-box", 1, 0).text
+                            self.botDriver.find_element("tag name", "body").send_keys(Keys.ESCAPE)
+                        else:
+                            profile = None
+                            i.click()
+                        return {"online": online, "nameId": userNameId, "name": userName, "id": userId, "nick": userNick, "avatar": userAvatar,
+                                "banner": userBanner, "profile": profile, "game": userGaming}
+                except NoSuchElementException:
+                    continue
+        return None
 
     def selectChannel(self, ChannelName: str):
         self.getChannels()
