@@ -1,5 +1,7 @@
 # API文档
 
+### [API更新日志](https://github.com/PlumeIS/khlBot/blob/main/doc/ApiUpdateLog.md)
+
 ## 配置文件  
 [khlHttpApi.json](https://github.com/PlumeIS/khlBot/blob/main/config/khlHttpApi.json)  
   
@@ -42,7 +44,7 @@
 ### 获得频道名列表 /getChannelName  
 条件:  
 
-    /getServerName
+    /selectServer
 
 方法:  
 
@@ -102,6 +104,10 @@
 ---  
 
 ### 进入频道 /selectChannel  
+条件:  
+
+    /selectServer
+
 方法:  
 
     POST  
@@ -131,6 +137,11 @@
 ---  
 
 ### 捕获消息 /fetchMessage  
+条件:  
+
+    /selectServer
+    /selectChannel
+
 方法:  
 
     GET, POST  
@@ -185,6 +196,11 @@
 ---  
   
 ### 发送文本消息 /sendMessage  
+条件:  
+
+    /selectServer
+    /selectChannel
+
 方法:  
 
     POST  
@@ -212,6 +228,11 @@
 | msg | str | 状态 |
 
 ### 发送图片 /sendImage  
+条件:  
+
+    /selectServer
+    /selectChannel
+
 方法:  
 
     POST  
@@ -241,6 +262,11 @@
 | msg | str | 状态 |
 
 ### 发送At消息 /sendAt  
+条件:  
+
+    /selectServer
+    /selectChannel
+
 方法:  
 
     POST  
@@ -266,5 +292,3 @@
 | ---- | ---- | ---- |
 | code | int | 状态码 |
 | msg | str | 状态 |
-
-### [API更新日志](https://github.com/PlumeIS/khlBot/blob/main/doc/ApiUpdateLog.md)
