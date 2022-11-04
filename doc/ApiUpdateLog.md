@@ -24,4 +24,7 @@
 
 ### 2022/11/4
 + 增加/getBotName
++ 增加/getMemberList
++ 增加/getMemberInfo
++ 增加/getAllMemberInfo
 + 更新 API文档
