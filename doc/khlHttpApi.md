@@ -1,8 +1,9 @@
 # API文档
 ## API目录
-+ ## [服务器以及频道](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BB%A5%E5%8F%8A%E9%A2%91%E9%81%93)
-+ ## [机器人相关](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%9B%B8%E5%85%B3)
-+ ##
++ ### [服务器以及频道](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BB%A5%E5%8F%8A%E9%A2%91%E9%81%93)
++ ### [机器人相关](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%9B%B8%E5%85%B3)
++ ### [服务器成员](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%88%90%E5%91%98)
++ ### [消息相关](https://github.com/PlumeIS/khlBot/blob/main/doc/khlHttpApi.md#%E6%B6%88%E6%81%AF%E7%9B%B8%E5%85%B3)
 ### [API更新日志](https://github.com/PlumeIS/khlBot/blob/main/doc/ApiUpdateLog.md)
 
 ## 配置文件  
