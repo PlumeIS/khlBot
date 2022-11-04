@@ -1,6 +1,6 @@
-import atexit
 import json
 import base64
+import atexit
 from flask import Flask, request, jsonify
 from tools.AutoLogin import AutoLogin
 from core.khlBotCoreEdge import Bot
@@ -10,110 +10,231 @@ from message.MessageFetcher import MessageFetcher
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
-accountConfig = AutoLogin()
-if not accountConfig:
-    phone = input("账号:")
-    password = input("密码:")
-else:
-    phone = accountConfig["account"]
-    password = accountConfig["password"]
+messageSender: MessageSender
+messageFetcher: MessageFetcher
 
-bot = Bot(phone, password, True)
-bot.botLogin()
-atexit.register(bot.quit)
+codes = {
+    0: "Successful!",
+    1: "Missing parameter!",
+    2: "Wrong value!",
+    3: "Flow operation of missing process!",
+    4: "Internal error!",
+    5: "Io error!"
+}
 
-messageSender = None
-messageFetcher = None
+
+class Respond(dict):
+    def __init__(self, code=None, msg=None, data=None):
+        super().__init__()
+        self["code"] = 0
+        self["msg"] = "Successful!"
+        self["data"] = None
+        if code:
+            self["code"] = code
+        if msg:
+            self["msg"] = msg
+        if data:
+            self["data"] = data
+
+    def setCode(self, code):
+        self["code"] = code
+        return self
+
+    def setMsg(self, msg):
+        self["msg"] = msg
+        return self
+
+    def setData(self, data):
+        self["data"] = data
+        return self
 
 
 @app.route("/getServerName", methods=["GET"])
 def getServer():
-    return jsonify({"code": 0, "msg": "success", "data": bot.getServers()})
+    respond = Respond()
+    try:
+        data = bot.getServers()
+    except Exception as err:
+        respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+        return jsonify(respond)
+    else:
+        return jsonify(respond.setData(data))
 
 
 @app.route("/getChannelName", methods=["GET"])
 def getChannel():
+    respond = Respond()
     if bot.isSelectServer:
-        return jsonify({"code": 0, "msg": "success", "data": bot.getChannels()})
+        try:
+            data = bot.getChannels()
+        except Exception as err:
+            respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+            return jsonify(respond)
+        else:
+            return jsonify(respond.setData(data))
     else:
-        return jsonify({"code": 1, "msg": "Not Select Server!"})
+        return jsonify(respond.setCode(3).setMsg(codes[3] + " Not server selected!"))
 
 
 @app.route("/selectServer", methods=["POST"])
 def selectServer():
     global messageSender
-    if request.form.get("name") in bot.getServers():
-        bot.selectServer(request.form.get("name"))
-        messageSender = MessageSender(bot)
-        return jsonify({"code": 0, "msg": "success"})
+    respond = Respond()
+    name = request.form.get("name")
+    if name:
+        if name in bot.getServers():
+            try:
+                bot.selectServer(name)
+                messageSender = MessageSender(bot)
+            except Exception as err:
+                respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+                return jsonify(respond)
+            else:
+                return jsonify(respond)
+        else:
+            jsonify(respond.setCode(2).setMsg(codes[2] + f'No Server! "{name}"'))
     else:
-        return jsonify({"code": 1, "msg": "Not Server!"})
+        return jsonify(respond.setCode(1).setCode(codes[2] + '"name"'))
 
 
 @app.route("/selectChannel", methods=["POST"])
 def selectChannel():
     global messageFetcher
-    if bot.isSelectServer and request.form.get("name") in bot.getChannels():
-        bot.selectChannel(request.form.get("name"))
-        print(bot.botName)
-        messageFetcher = MessageFetcher(bot, filters=[bot.botName])
-        return jsonify({"code": 0, "msg": "success"})
+    respond = Respond()
+    name = request.form.get("name")
+    if name:
+        if bot.isSelectServer:
+            if name in bot.getChannels():
+                try:
+                    bot.selectChannel(name)
+                    messageFetcher = MessageSender(bot)
+                except Exception as err:
+                    respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+                    return jsonify(respond)
+                else:
+                    return jsonify(respond)
+            else:
+                jsonify(respond.setCode(2).setMsg(codes[2] + f'No Channel! "{name}"'))
+        else:
+            return jsonify(respond.setCode(3).setMsg(codes[3] + " Not server selected!"))
     else:
-        return jsonify({"code": 0, "msg": "Not Select Server or Not Channel Name!"})
+        return jsonify(respond.setCode(1).setCode(codes[2] + '"name"'))
+
+
+@app.route("/getBotName", methods=["GET"])
+def getBotName():
+    respond = Respond()
+    if bot.isSelectServer:
+        try:
+            data = bot.getBotName()
+        except Exception as err:
+            respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+            return jsonify(respond)
+        else:
+            return jsonify(respond.setData(data))
+    else:
+        return jsonify(respond.setCode(3).setMsg(codes[3] + " Not server selected!"))
 
 
 @app.route("/fetchMessage", methods=["GET", "POST"])
 def fetchMessage():
     global messageFetcher
-    if bot.isSelectServer and bot.isSelectChannel:
-        data = messageFetcher.fetch()
-        return jsonify({"code": 0, "msg": "success", "data": data})
+    respond = Respond()
+    if bot.isSelectServer:
+        if bot.isSelectChannel:
+            try:
+                data = messageFetcher.fetch()
+            except Exception as err:
+                respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+                return jsonify(respond)
+            else:
+                return jsonify(respond.setData(data))
+        else:
+            return jsonify(respond.setCode(3).setMsg(codes[3] + " Not channel selected!"))
     else:
-        return jsonify({"code": 1, "msg": "Not Select Server or Channel!"})
+        return jsonify(respond.setCode(3).setMsg(codes[3] + " Not server selected!"))
 
 
 @app.route("/sendMessage", methods=["POST"])
 def sendMessage():
     global messageSender
-    if bot.isSelectServer and bot.isSelectChannel:
-        messageSender.sendMessage(request.form.get("text"))
-        return jsonify({"code": 0, "msg": "success"})
+    respond = Respond()
+    if bot.isSelectServer:
+        if bot.isSelectChannel:
+            try:
+                messageSender.sendMessage(request.form.get("text"))
+            except Exception as err:
+                respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+                return jsonify(respond)
+            return jsonify(respond)
+        else:
+            return jsonify(respond.setCode(3).setMsg(codes[3] + " Not channel selected!"))
     else:
-        return jsonify({"code": 1, "msg": "Not Select Server or Channel!"})
+        return jsonify(respond.setCode(3).setMsg(codes[3] + " Not server selected!"))
 
 
 @app.route("/sendImage", methods=["POST"])
 def sendImage():
     global messageSender
-    if bot.isSelectServer and bot.isSelectChannel:
-        imgType = request.form.get("type")
-        imgdata = request.form.get("data")
-        if imgType == "base64":
-            with open("./temp.png", "wb") as img:
-                img.write(base64.b64decode(imgdata.encode("utf-8")))
-            messageSender.sendImage(path="./temp.png")
-        elif imgType == "path":
-            messageSender.sendImage(path=imgdata)
-        elif imgType == "url":
-            messageSender.sendImage(url=imgdata)
+    respond = Respond()
+    if bot.isSelectServer:
+        if bot.isSelectChannel:
+            try:
+                imgType = request.form.get("type")
+                imgdata = request.form.get("data")
+                if imgType == "base64":
+                    with open("./temp.png", "wb") as img:
+                        img.write(base64.b64decode(imgdata.encode("utf-8")))
+                    messageSender.sendImage(path="./temp.png")
+                elif imgType == "path":
+                    messageSender.sendImage(path=imgdata)
+                elif imgType == "url":
+                    messageSender.sendImage(url=imgdata)
+                else:
+                    return respond.setCode(1).setMsg(codes[1]+"Only support type: base64, path, url")
+            except Exception as err:
+                respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+                return jsonify(respond)
+            else:
+                return jsonify(respond)
         else:
-            return jsonify({"code": 1, "msg": "Only support type: base64, path, url"})
-        return jsonify({"code": 0, "msg": "success"})
+            return jsonify(respond.setCode(3).setMsg(codes[3] + " Not channel selected!"))
     else:
-        return jsonify({"code": 1, "msg": "Not Select Server or Channel!"})
+        return jsonify(respond.setCode(3).setMsg(codes[3] + " Not server selected!"))
 
 
 @app.route("/sendAt", methods=["POST"])
 def sendAt():
     global messageSender
-    if bot.isSelectServer and bot.isSelectChannel:
-        messageSender.sendAt(request.form.get("username"))
-        return jsonify({"code": 0, "msg": "success"})
+    respond = Respond()
+    if bot.isSelectServer:
+        if bot.isSelectChannel:
+            try:
+                messageSender.sendAt(request.form.get("username"))
+            except Exception as err:
+                respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
+                return jsonify(respond)
+            else:
+                return jsonify(respond)
+        else:
+            return jsonify(respond.setCode(3).setMsg(codes[3] + " Not channel selected!"))
     else:
-        return jsonify({"code": 1, "msg": "Not Select Server or Channel!"})
+        return jsonify(respond.setCode(3).setMsg(codes[3] + " Not server selected!"))
 
 
 if __name__ == '__main__':
+    accountConfig = AutoLogin()
+    if not accountConfig:
+        phone = input("账号:")
+        password = input("密码:")
+    else:
+        phone = accountConfig["account"]
+        password = accountConfig["password"]
+
+    bot = Bot(phone, password, True)
+    bot.botLogin()
+    atexit.register(bot.quit)
+
     with open("./config/khlHttpApi.json", "r") as configFile:
         config = json.loads(configFile.read())
 
