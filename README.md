@@ -9,7 +9,16 @@
 + 将会更新http api 交互以减少机器人重启时间
 
 ## 使用API与机器人交互  
-  
+### 非开发环境:
+解压:
+
+    khlHttpApi.zip
+
+运行:
+
+    khlHttpApi.exe
+
+### 开发环境:
 安装依赖库后,启动:  
   
     start.bat  
