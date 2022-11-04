@@ -14,7 +14,6 @@ class Bot:
         self.startTime = datetime.datetime.now()
         self.PhoneNumber = phoneNumber
         self.password = password
-        self.botName = ""
         self.isLogging = True
         self.isUpdate = isUpdateDriver
 
@@ -25,7 +24,7 @@ class Bot:
             "profile.default_content_setting_values.geolocation": 1,
             "profile.default_content_setting_values.notifications": 1
         })
-        options.headless = True
+        options.headless = False
         options.add_argument('log-level=3')
         service = Service(executable_path="./lib/msedgedriver.exe")
         try:
@@ -145,7 +144,12 @@ class Bot:
         self.server = serverName
         time.sleep(1)
         self.logger("INFO", f"Select server to {serverName}")
-        self.botName = self.botDriver.find_element("class name", "user-name-text").text
+
+    def getBotName(self):
+        if self.isSelectServer:
+            return self.botDriver.find_element("class name", "user-name-text").text
+        else:
+            return None
 
     def selectChannel(self, ChannelName: str):
         self.getChannels()
