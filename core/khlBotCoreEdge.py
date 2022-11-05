@@ -78,7 +78,7 @@ class Bot:
                 raise TimeoutException(f"Can't not wait element {value} by {method}")
             time.sleep(interval)
 
-    def waitElementByElement(self, element, method, value, timeout, interval):
+    def waitElementByElement(element, method, value, timeout, interval):
         t = time.time()
         while True:
             try:
@@ -86,7 +86,7 @@ class Bot:
             except NoSuchElementException:
                 pass
             else:
-                return self.botDriver.find_element(method, value)
+                return element.find_element(method, value)
             if time.time() - t > timeout:
                 raise TimeoutException(f"Can't not wait element {value} by {method}")
             time.sleep(interval)
