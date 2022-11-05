@@ -66,9 +66,9 @@
     
     mf = MessageFetcher(bot)
     ms = MessageSender(bot)
-    chat = mf.fetch()
-    if chat:
-        print(chat)
+    chats = mf.fetch()
+    for chat in chats:
+         print(chat)
     ms.sendMessage("Hello World!")
   
 来接收以及发送消息  
