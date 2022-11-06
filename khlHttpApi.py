@@ -23,7 +23,7 @@ codes = {
     5: "Io error!"
 }
 
-version = "1.4.0"
+version = "1.3.9"
 
 
 class Respond(dict):
@@ -115,7 +115,7 @@ def selectChannel():
             if name in bot.getChannels():
                 try:
                     bot.selectChannel(name)
-                    messageFetcher = MessageSender(bot)
+                    messageFetcher = MessageFetcher(bot)
                 except Exception as err:
                     respond.setCode(4).setMsg(codes[4] + f'({err})[{err.__traceback__.tb_frame.f_globals["__file__"]}:{err.__traceback__.tb_lineno}]')
                     return jsonify(respond)
