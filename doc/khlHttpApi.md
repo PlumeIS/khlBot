@@ -243,6 +243,7 @@
       "msg": "success",
       "data": {
         "online": True,
+        "server": "",
         "nameId": "",
         "name": "",
         "id": "",
@@ -265,6 +266,7 @@
 | msg | str | 状态 |
 | data | dict | 信息 |
 | online | bool | 是否上线 |
+| server | str | 所属服务器 |
 | nameId | str | 包含ID的名称(绿毛#0001) |
 | name | str | 名称 |
 | id | str | ID(不带#号) |
@@ -352,6 +354,8 @@
             'text': ''
            },
            'sender': '',
+           "server": '',
+           "channel": '',
            'time': ''
          },
          ...
@@ -371,6 +375,8 @@
 | image[url] | str | 图片链接 |
 | text | str | 消息文本 |
 | sender | str | 发送者 |
+| server | str | 服务器 |
+| channel | str | 频道 |
 | time | str | 时间(%y-%m-%d %H:%M) |
   
 ---  
