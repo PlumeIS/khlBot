@@ -28,3 +28,8 @@
 + 增加/getMemberInfo
 + 增加/getAllMemberInfo
 + 更新 API文档
+
+---
+
+### 2022/11/6
++ 更新 API文档
