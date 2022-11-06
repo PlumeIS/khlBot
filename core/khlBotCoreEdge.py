@@ -78,7 +78,7 @@ class Bot:
                 raise TimeoutException(f"Can't not wait element {value} by {method}")
             time.sleep(interval)
 
-    def waitElementByElement(element, method, value, timeout, interval):
+    def waitElementByElement(self, element, method, value, timeout, interval):
         t = time.time()
         while True:
             try:
@@ -86,7 +86,7 @@ class Bot:
             except NoSuchElementException:
                 pass
             else:
-                return element.find_element(method, value)
+                return self.botDriver.find_element(method, value)
             if time.time() - t > timeout:
                 raise TimeoutException(f"Can't not wait element {value} by {method}")
             time.sleep(interval)
@@ -218,7 +218,10 @@ class Bot:
                         userNick = nameCard.find_element("class name", "name").text
 
                     roles = []
-                    roleBox = self.botDriver.find_elements("class name", "role-name")
+                    try:
+                        roleBox = self.botDriver.find_elements("class name", "role-name")
+                    except NoSuchElementException:
+                        roleBox = []
                     for j in roleBox:
                         roles.append(j.text)
 
@@ -259,7 +262,7 @@ class Bot:
                         self.botDriver.find_element("tag name", "body").send_keys(Keys.ESCAPE)
                     else:
                         profile = None
-                    userInfos.append({"online": online, "nameId": userNameId, "name": userName, "id": userId, "nick": userNick, "avatar": userAvatar,
+                    userInfos.append({"online": online, "server": self.server, "nameId": userNameId, "name": userName, "id": userId, "nick": userNick, "avatar": userAvatar,
                                       "banner": userBanner, "profile": profile, "roles": roles, "game": userGaming})
                 except NoSuchElementException:
                     continue
@@ -296,7 +299,10 @@ class Bot:
                             userNick = nameCard.find_element("class name", "name").text
 
                         roles = []
-                        roleBox = self.botDriver.find_elements("class name", "role-name")
+                        try:
+                            roleBox = self.botDriver.find_elements("class name", "role-name")
+                        except NoSuchElementException:
+                            roleBox = []
                         for j in roleBox:
                             roles.append(j.text)
 
@@ -338,7 +344,7 @@ class Bot:
                         else:
                             profile = None
                             self.botDriver.find_element("tag name", "body").send_keys(Keys.ESCAPE)
-                        return {"online": online, "nameId": userNameId, "name": userName, "id": userId, "nick": userNick, "avatar": userAvatar,
+                        return {"online": online, "server": self.server, "nameId": userNameId, "name": userName, "id": userId, "nick": userNick, "avatar": userAvatar,
                                 "banner": userBanner, "profile": profile, "roles": roles, "game": userGaming}
                 except NoSuchElementException:
                     continue
